@@ -1,0 +1,5 @@
+{
+  "name": "Flexer OSINT ",
+  "description": "A high-performance OSINT dashboard allowing users to run complex intelligence lookups via secure, admin-configured APIs. Features single-device session management, admin approval workflows, and JSON data visualization.",
+  "requestFramePermissions": []
+}
