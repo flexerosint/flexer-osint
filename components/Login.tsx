@@ -19,16 +19,14 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err: any) {
-      console.error("Auth Failure:", err.code, err.message);
-      
       if (err.code === 'auth/invalid-credential') {
-        setError("Invalid credentials. If you are sure they are correct, please verify that your current URL domain is listed in 'Authorized Domains' under Firebase Console > Authentication > Settings.");
+        setError("Wrong email or password.");
       } else if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        setError("The email or password you entered is incorrect.");
+        setError("Invalid login details.");
       } else if (err.code === 'auth/too-many-requests') {
-        setError("Too many failed attempts. Please wait before trying again.");
+        setError("Too many attempts. Try again later.");
       } else {
-        setError(err.message || "An authentication error occurred.");
+        setError("Failed to login. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -37,29 +35,29 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-[#111] p-8 rounded-2xl shadow-2xl border border-gray-800">
+      <div className="max-w-md w-full bg-[#111] p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-800">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-600/10 mb-4 border border-blue-600/30">
-            <i className="fas fa-fingerprint text-2xl text-blue-500"></i>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600/10 mb-5 border border-blue-600/30">
+            <i className="fas fa-lock text-xl text-blue-500"></i>
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-white">Flexer OSINT</h1>
-          <p className="text-gray-400 mt-2">Login to Secure Interface</p>
+          <p className="text-gray-500 mt-2 text-sm">Welcome back. Please login.</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-900/10 border border-red-500/30 rounded-xl text-red-400 text-sm flex items-start gap-3">
-            <i className="fas fa-triangle-exclamation mt-1"></i>
-            <span className="leading-relaxed">{error}</span>
+          <div className="mb-6 p-4 bg-red-900/10 border border-red-500/30 rounded-xl text-red-400 text-xs flex items-center gap-3">
+            <i className="fas fa-exclamation-circle"></i>
+            <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Email Address</label>
+            <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Email</label>
             <input
               type="email"
               required
-              className="w-full bg-[#0a0a0a] border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-blue-500 transition-all"
+              className="w-full bg-[#0a0a0a] border border-gray-700 rounded-xl py-3.5 px-4 text-white focus:outline-none focus:border-blue-500 transition-all text-sm"
               placeholder="agent@flexer.io"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -67,11 +65,11 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Access Key</label>
+            <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Password</label>
             <input
               type="password"
               required
-              className="w-full bg-[#0a0a0a] border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-blue-500 transition-all"
+              className="w-full bg-[#0a0a0a] border border-gray-700 rounded-xl py-3.5 px-4 text-white focus:outline-none focus:border-blue-500 transition-all text-sm"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -81,17 +79,17 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 flex items-center justify-center shadow-lg shadow-blue-900/20 active:scale-[0.98]"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 flex items-center justify-center shadow-lg shadow-blue-900/20 active:scale-[0.98] text-xs uppercase tracking-widest"
           >
-            {loading ? <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : 'INITIALIZE SESSION'}
+            {loading ? <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : 'Login Now'}
           </button>
         </form>
 
         <div className="mt-8 pt-6 border-t border-gray-800 text-center">
-          <p className="text-gray-500 text-sm">
-            Unregistered?{' '}
-            <button onClick={onSwitch} className="text-blue-500 hover:text-blue-400 font-bold transition-colors">
-              Create Credentials
+          <p className="text-gray-500 text-xs">
+            No account?{' '}
+            <button onClick={onSwitch} className="text-blue-500 hover:text-blue-400 font-bold ml-1 transition-colors">
+              Sign Up
             </button>
           </p>
         </div>
